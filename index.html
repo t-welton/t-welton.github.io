@@ -11,7 +11,9 @@
       --bg: #ffffff;
       --text: #111111;
       --muted: #666666;
-      --line: #dddddd;
+      --line: #e0e3e7;
+      --section-line: #bfcbd5;
+      --section-accent: #346785;
       --hover: #245b8a;
       --max: 820px;
     }
@@ -29,8 +31,8 @@
       color: var(--text);
       font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
                    "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.58;
+      font-size: 15px;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -63,7 +65,7 @@
     }
 
     nav {
-      min-height: 54px;
+      min-height: 48px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -76,9 +78,9 @@
 
     .nav-links {
       display: flex;
-      gap: 18px;
+      gap: 16px;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .nav-links a:hover {
@@ -87,16 +89,16 @@
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 156px;
-      gap: 30px;
+      grid-template-columns: minmax(0, 1fr) 140px;
+      gap: 26px;
       align-items: center;
-      padding: 42px 0 38px;
+      padding: 30px 0 26px;
     }
 
     h1 {
-      margin: 0 0 8px;
+      margin: 0 0 7px;
       color: var(--text);
-      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-size: clamp(1.9rem, 4vw, 2.65rem);
       font-weight: 600;
       line-height: 1.05;
       letter-spacing: -0.035em;
@@ -104,15 +106,15 @@
     }
 
     .position {
-      margin: 0 0 6px;
+      margin: 0 0 5px;
       color: var(--muted);
-      font-size: 16px;
+      font-size: 14px;
     }
 
     .affiliations {
-      margin: 0 0 16px;
+      margin: 0 0 12px;
       color: var(--muted);
-      font-size: 15px;
+      font-size: 13px;
     }
 
     .affiliations a {
@@ -126,15 +128,15 @@
     }
 
     .intro {
-      max-width: 620px;
+      max-width: 600px;
       margin: 0;
       color: #333333;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .profile-photo {
-      width: 156px;
-      height: 194px;
+      width: 140px;
+      height: 174px;
       object-fit: cover;
       object-position: center;
       border: 1px solid var(--line);
@@ -143,8 +145,8 @@
     }
 
     section {
-      padding: 32px 0;
-      border-top: 1px solid var(--line);
+      padding: 24px 0;
+      border-top: 1px solid var(--section-line);
     }
 
     .section-grid {
@@ -152,18 +154,20 @@
     }
 
     h2 {
-      margin: 0 0 16px;
+      margin: 0 0 12px;
+      padding-left: 10px;
+      border-left: 3px solid var(--section-accent);
       color: var(--text);
-      font-size: 1.35rem;
+      font-size: 1.15rem;
       font-weight: 600;
-      letter-spacing: -0.02em;
-      text-transform: none;
+      line-height: 1.3;
+      letter-spacing: -0.015em;
     }
 
     .interests {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px 16px;
+      gap: 5px 14px;
     }
 
     .interest {
@@ -171,7 +175,7 @@
       border: 0;
       border-radius: 0;
       color: #333333;
-      font-size: 15px;
+      font-size: 14px;
     }
 
     .rows {
@@ -179,13 +183,13 @@
     }
 
     .row {
-      padding: 14px 0;
+      padding: 10px 0;
       border-bottom: 1px solid var(--line);
     }
 
     .row h3 {
-      margin: 0 0 5px;
-      font-size: 17px;
+      margin: 0 0 3px;
+      font-size: 15px;
       font-weight: 550;
       line-height: 1.4;
     }
@@ -193,12 +197,12 @@
     .row p {
       margin: 0;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .publication-link {
       display: inline-block;
-      font-size: 18px;
+      font-size: 15px;
       border-bottom: 1px solid #555a62;
     }
 
@@ -216,7 +220,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 11px 0;
+      padding: 8px 0;
       border-bottom: 1px solid var(--line);
       color: #222222;
     }
@@ -256,18 +260,18 @@
 
       .hero {
         grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 30px 0 28px;
+        gap: 16px;
+        padding: 24px 0 22px;
       }
 
       .profile-photo {
         order: -1;
-        width: 132px;
-        height: 164px;
+        width: 116px;
+        height: 144px;
       }
 
       section {
-        padding: 28px 0;
+        padding: 21px 0;
       }
     }
   </style>
