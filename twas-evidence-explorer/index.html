@@ -128,7 +128,7 @@ function highlight(){ui.grid.querySelectorAll('.tile.selected').forEach(el=>el.c
 function referenceCard(r){
  const safeLink=r.link&&/^https:\/\//.test(r.link)?r.link:'';
  const gw=r.gwas?`<span class="pill">${esc(r.gwas)}</span>`:'';
- return `<article class="record"><div class="studyname">${esc(r.study)}</div>${gw}${r.strength?`<span class="pill">${esc(r.strength)}</span>`:''}${r.context?`<div class="fact"><b>Tissue / context:</b> ${esc(r.context)}</div>`:''}${r.notes?`<div class="notes">${esc(r.notes)}</div>`:''}<div class="sourceline">${safeLink?`<a href="${esc(safeLink)}" target="_blank" rel="noopener noreferrer">Open source publication ↗</a>`:'No publication link recorded'}${r.source?`<div><b>Source:</b> ${esc(r.source)}</div>`:''}</div></article>`;
+ return `<article class="record"><div class="studyname">${esc(r.study)}</div>${gw}${r.strength?`<span class="pill">${esc(r.strength)}</span>`:''}${r.context?`<div class="fact"><b>Tissue / context:</b> ${esc(r.context)}</div>`:''}<div class="sourceline">${safeLink?`<a href="${esc(safeLink)}" target="_blank" rel="noopener noreferrer">Open source publication ↗</a>`:'No publication link recorded'}${r.source?`<div><b>Source:</b> ${esc(r.source)}</div>`:''}</div></article>`;
 }
 function detailCell(gene,key){const l=layerMap.get(key),rr=getRefs(gene,key).slice().sort((a,b)=>a.study.localeCompare(b.study)),n=count(gene,key);
  $('detailKicker').classList.remove('hidden');$('detailKicker').textContent=disease+' · GENE × EVIDENCE';$('detailTitle').innerHTML=`<i>${esc(gene)}</i> / ${esc(l.label)}`;$('detailDescription').classList.remove('hidden');$('detailDescription').textContent=l.description;
