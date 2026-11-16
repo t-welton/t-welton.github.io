@@ -1,0 +1,212 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Interactive study-level evidence map for amyotrophic lateral sclerosis transcriptome-wide association studies."><title>TWAS evidence map interactive explorer</title><style>
+:root{--bg:#f6f8fa;--paper:#fff;--ink:#192b3b;--muted:#667989;--line:#dbe3e9;--teal:#0b7285;--navy:#163c56;--shadow:0 7px 28px rgba(16,40,60,.08);--tile0:#eef2f5;--tile1:#cae5e7;--tile2:#8dcbd1;--tile3:#43a2b3;--tile4:#176b82}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #edb95a;outline-offset:2px}a{color:#0b688a;text-decoration:none}a:hover{text-decoration:underline}
+.sitehead{background:linear-gradient(110deg,#102f47 0%,#17475d 57%,#0e6570 100%);color:#fff;padding:27px max(26px,calc((100vw - 1610px)/2)) 24px}
+.eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#a6cfd2;font-weight:750;display:flex;align-items:center;gap:9px}.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:#6bdec8}
+h1{font-size:clamp(24px,3.2vw,37px);line-height:1.1;margin:12px 0 7px;letter-spacing:-.035em;font-weight:760}
+.subhead{margin:0;color:#d1e4e8;font-size:14px;max-width:850px;line-height:1.6}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:21px}.stat{padding:7px 12px;border:1px solid rgba(230,250,255,.23);border-radius:7px;color:#e4f1f3;font-size:12px}.stat strong{font-variant-numeric:tabular-nums;color:white;font-size:14px;margin-right:5px}
+.page{max-width:1660px;margin:0 auto;padding:20px 23px 32px}
+.controls{background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:12px;padding:15px 16px;display:flex;align-items:flex-end;flex-wrap:wrap;gap:11px}
+.control{display:flex;flex-direction:column;gap:5px}.control label{font-size:11px;text-transform:uppercase;letter-spacing:.075em;font-weight:800;color:#71818d}
+.control input,.control select{border:1px solid #d2dce3;border-radius:7px;background:#fff;padding:9px 11px;height:38px;color:#24384a;font-size:13px}.control input{min-width:220px;width:100%}.control.search{flex:1 1 220px;max-width:320px}
+.controls .actions{display:flex;gap:7px;margin-left:auto}.smallbtn{border:1px solid #cddae1;background:#fff;border-radius:7px;color:#244356;padding:9px 11px;font-weight:680;font-size:12px;white-space:nowrap;height:38px}.smallbtn:hover{background:#f0f7f9}.smallbtn.primary{background:#13677b;color:#fff;border-color:#13677b}.smallbtn.primary:hover{background:#0b5168}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 2px 12px}.toolbar small{color:var(--muted);font-size:12px}.toolbar strong{color:#1b4258}.legend{display:flex;gap:6px;align-items:center;font-size:11px;color:#597283}.legend .squares{display:flex;gap:3px;margin:0 3px}.legend .sq{width:19px;height:12px;border-radius:2px}.legend b{font-weight:600}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 355px;gap:15px;align-items:start}.mapcard,.detailcard{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}.mapcard{min-width:0}.maphead{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 10px;border-bottom:1px solid #edf1f4;gap:10px}.maphead .title{font-weight:760;font-size:14px}.maphead .subtitle{color:var(--muted);font-size:11px;margin-top:3px}.maphead .hint{font-size:11px;color:#71808f}
+.mapscroll{overflow:auto;max-height:min(75vh,900px);overscroll-behavior:contain;scrollbar-color:#b4c3cd #f3f7f9}.mapgrid{--gw:131px;--sw:47px;--vw:51px;--cell:40px;display:grid;grid-template-columns:var(--gw) var(--sw) var(--vw) repeat(var(--ncols),var(--cell));grid-template-rows:124px;grid-auto-rows:28px;width:max-content;min-width:100%;position:relative;padding:0 9px 12px 0}.corner,.colhead{height:122px;align-self:end;display:flex;align-items:end;border-bottom:1px solid #cad7de;background:#f9fbfc;z-index:6;position:sticky;top:0}.corner{color:#657786;justify-content:center;padding:7px 3px;font-weight:700;font-size:10px;letter-spacing:.04em}.corner.genehead{justify-content:flex-start;padding-left:13px;left:0;z-index:10;box-shadow:1px 0 0 #dde5ea}.corner.studieshead{left:var(--gw);z-index:9}.corner.scorehead{left:calc(var(--gw) + var(--sw));z-index:9;box-shadow:1px 0 0 #dde5ea}.colhead{font-size:10px;color:#435a6a;justify-content:center;padding-bottom:8px;border-left:1px solid #eaf0f2}.colhead span{white-space:nowrap;writing-mode:vertical-rl;transform:rotate(180deg);text-align:left;font-weight:680;max-height:105px;line-height:1.3}.colhead.active{background:#e9f5f5;color:#0b6a7b}
+.genecell,.studiescell,.scorecell,.tile{border:0;border-bottom:1px solid #e8eef2;align-self:stretch;min-height:28px}.genecell{position:sticky;left:0;z-index:4;background:#fff;font-size:12px;font-style:italic;font-weight:750;text-align:left;padding:5px 8px 3px 13px;color:#25445a;box-shadow:1px 0 0 #e5ebf0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.genecell:hover{color:#006f8b;background:#edf6f9}.studiescell{position:sticky;left:var(--gw);z-index:3;background:#fff;text-align:center;padding-top:5px;font-size:11px;color:#527183;font-variant-numeric:tabular-nums}.scorecell{position:sticky;left:calc(var(--gw) + var(--sw));z-index:3;background:#fff;padding:4px 5px;display:flex;align-items:center;gap:4px;font-size:10px;box-shadow:1px 0 0 #e5ebf0}.scorecell .scorevalue{font-variant-numeric:tabular-nums;font-weight:750;width:28px;text-align:right;color:#27485a}.scorecell .scorebar{height:6px;background:#64b5b7;border-radius:2px;min-width:2px;max-width:25px}
+.tile{display:flex;justify-content:center;align-items:center;border-right:1px solid #fff;background:var(--tile0);color:transparent;position:relative;font-size:11px;font-variant-numeric:tabular-nums;font-weight:740;line-height:1}.tile[data-v="1"]{background:var(--tile1);color:#466d7d}.tile[data-v="2"]{background:var(--tile2);color:#13485a}.tile[data-v="3"]{background:var(--tile3);color:#fff}.tile[data-v="4"]{background:var(--tile4);color:#fff}.tile:hover{outline:2px solid #0b4f6a;outline-offset:-2px;z-index:2;box-shadow:inset 0 0 0 2px #fff}.tile.selected{outline:2px solid #e0a239;outline-offset:-2px;z-index:2;box-shadow:inset 0 0 0 1px white}.tile.empty:hover{background:#e1eaf0}.mapgrid .zebra{background:#f8fafb}
+.detailcard{position:sticky;top:16px;max-height:85vh;display:flex;flex-direction:column}.detailtop{padding:17px 18px 13px;border-bottom:1px solid #e9eef2}.detailtop .kicker{font-size:10px;text-transform:uppercase;color:#6b8190;letter-spacing:.13em;font-weight:800}.detailtop h2{font-size:21px;letter-spacing:-.03em;margin:5px 0 4px;line-height:1.2}.detailtop .description{font-size:12px;color:#6b7d8b;line-height:1.5}.detailbody{overflow:auto;padding:14px 17px 20px;scrollbar-color:#b1c0ca #f4f7f9}.countline{font-size:12px;color:#526b7c;padding-bottom:12px;line-height:1.5}.countline strong{font-size:17px;color:#20566a}.record{border:1px solid #e2e9ed;border-radius:8px;padding:11px 12px;margin-bottom:9px;background:#fff}.record .studyname{font-size:12px;line-height:1.35;font-weight:780;color:#1f495c}.record .pill{display:inline-flex;align-items:center;font-size:10px;font-weight:750;background:#edf5f7;color:#246a79;border-radius:4px;padding:3px 6px;margin:7px 5px 0 0}.record .fact{font-size:11px;color:#506a7b;margin-top:8px;line-height:1.45}.record .notes{font-size:11px;color:#475b6a;line-height:1.6;margin-top:8px}.record .sourceline{margin-top:8px;font-size:11px;line-height:1.5;color:#6b7c85;overflow-wrap:anywhere}.record a{font-weight:700}.panelnote{background:#f4f8fa;border-radius:8px;padding:11px 12px;font-size:11px;color:#607583;line-height:1.6}.muted{color:#8a9aa5}.hidden{display:none!important}
+.tooltip{position:fixed;z-index:100;pointer-events:none;max-width:min(365px,calc(100vw - 24px));min-width:245px;background:#132f41;color:#edf7fa;border:1px solid #4c7384;border-radius:10px;box-shadow:0 13px 38px rgba(2,22,35,.3);padding:12px 14px;display:none}.tooltip .tttitle{font-weight:760;font-size:13px;margin-bottom:5px}.tooltip .ttsub{color:#b2d9df;font-size:11px;line-height:1.5}.tooltip ul{padding-left:16px;margin:7px 0 0}.tooltip li{font-size:11px;margin:4px 0;line-height:1.4}.tooltip .tap{margin-top:8px;color:#a5c5d1;font-size:10px;border-top:1px solid #416578;padding-top:7px}
+.emptymsg{padding:28px;color:#657d8c;font-size:13px}
+@media(max-width:1230px){.workspace{grid-template-columns:minmax(0,1fr) 325px}.page{padding:16px}.sitehead{padding:24px 17px}.controls .actions{margin-left:0}}
+@media(max-width:870px){.workspace{grid-template-columns:1fr}.detailcard{position:static;max-height:650px}.control.search{max-width:none}.mapscroll{max-height:66vh}.page{padding:13px}.toolbar{margin:12px 2px}.maphead .hint{display:none}.controls{gap:9px}.controls .actions{width:100%}.controls .actions .smallbtn{flex:1}}
+@media print{.sitehead{color:#000;background:#fff}.controls,.detailcard,.tooltip,.footer,.maphead .hint,.smallbtn{display:none!important}.workspace{display:block}.mapscroll{max-height:none;overflow:visible}.mapgrid{transform-origin:top left;zoom:.8}.mapcard{box-shadow:none}}
+
+#statScore{display:inline}.stat .detail{font-size:11px;font-weight:500;color:#d5e6e9}.meta-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.source-button{display:inline-flex;color:#0a5c79;font-size:11px;font-weight:650;margin-top:5px}.scorebar{transition:width .12s}
+
+/* Single-disease release */
+.sitehead{padding-top:32px}
+.sitehead h1{margin-top:0;margin-bottom:10px}
+.paper-citation{margin:0;color:#d3e5ea;font-size:13px;line-height:1.6}
+.citation-status{color:#fff;font-weight:650}
+.disease-label{margin:14px 0 0;font-size:13px;color:#e8f1f4;font-weight:600;letter-spacing:.01em}
+@media(max-width:600px){.sitehead{padding-bottom:16px}.control.search{flex-basis:100%}.controls .control{flex:1 1 44%}.control input,.control select{width:100%;min-width:100px}}
+</style></head><body>
+<header class="sitehead">
+<h1>TWAS evidence map interactive explorer</h1>
+<p class="paper-citation">Paper citation: <span class="citation-status">under review</span></p>
+<p class="disease-label">Amyotrophic lateral sclerosis (ALS)</p>
+<div class="stats" id="activeStats"><div class="stat"><strong id="statGenes">395</strong> genes</div><div class="stat"><strong id="statStudies">18</strong> TWAS studies</div><div class="stat"><strong id="statLayers">21</strong> evidence layers</div><div class="stat"><strong id="statRecords">593</strong> study–gene records</div></div>
+</header>
+<main class="page">
+<section class="controls" id="controls" aria-label="Heatmap filters">
+<div class="control search"><label for="search">Search gene or study</label><input id="search" placeholder="e.g. C9orf72" autocomplete="off"></div>
+<div class="control"><label for="subset">Gene set</label><select id="subset"></select></div>
+<div class="control"><label for="sort">Sort by</label><select id="sort"></select></div>
+<div class="control"><label for="layer">Evidence layer</label><select id="layer"></select></div>
+<div class="actions"><button class="smallbtn" id="reset" type="button">Reset filters</button><button class="smallbtn" id="csv" type="button">Export CSV</button><button class="smallbtn primary" id="svg" type="button">Export SVG</button></div>
+</section>
+<div class="toolbar" id="toolbar"><small id="resultLabel"></small><div class="legend">Supporting <b id="legendUnit">studies</b><span class="squares"><span class="sq" style="background:var(--tile0)"></span><span class="sq" style="background:var(--tile1)"></span><span class="sq" style="background:var(--tile2)"></span><span class="sq" style="background:var(--tile3)"></span><span class="sq" style="background:var(--tile4)"></span></span>0 · 1 · 2 · 3 · 4+</div></div>
+<section class="workspace" id="workspace"><div class="mapcard"><div class="maphead"><div><div class="title" id="matrixTitle">Gene × evidence matrix</div><div class="subtitle" id="matrixSubtitle"></div></div><div class="hint">Scroll horizontally · Click a cell</div></div><div class="mapscroll" id="mapscroll"><div class="mapgrid" id="mapgrid" role="grid" aria-label="Interactive gene evidence heatmap"></div></div></div>
+<aside class="detailcard" aria-label="Selected evidence details"><div class="detailtop"><div class="kicker" id="detailKicker">Evidence details</div><h2 id="detailTitle">Select a cell</h2><div class="description" id="detailDescription">Select a cell to see supporting studies and source annotations.</div></div><div class="detailbody" id="detailBody"></div></aside></section>
+</main><div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true"></div>
+<script id="als-data-gzip" type="text/plain">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</script><script>
+
+'use strict';
+
+async function loadALSDataset(){
+ const b64=document.getElementById('als-data-gzip').textContent.trim();
+ const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+ const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+ const p=JSON.parse(await new Response(stream).text());
+ const specs=[
+ ["Expression TWAS","eTWAS","Genetically predicted gene expression"],
+ ["Splicing TWAS","sTWAS","Genetically predicted RNA splicing"],
+ ["APA TWAS","APA","Alternative polyadenylation TWAS"],
+ ["GWAS replication","GWAS rep.","Independent GWAS replication"],
+ ["QTL replication","QTL rep.","Independent QTL reference replication"],
+ ["Conditional analysis","Conditional","Conditional or joint TWAS evidence"],
+ ["TWAS fine-mapping","Fine-map","Gene-level statistical fine-mapping"],
+ ["Colocalisation","Coloc","Shared genetic association signal at a locus"],
+ ["MR / SMR","MR/SMR","Mendelian randomisation or summary-data-based Mendelian randomisation"],
+ ["Rare variants","Rare variant","Rare variant evidence"],
+ ["PWAS / pQTL","Protein","Proteomic association or protein QTL support"],
+ ["Observed transcriptomics","Observed RNA","Measured RNA evidence"],
+ ["Observed protein","Observed protein","Measured protein evidence"],
+ ["Experimental validation","Experimental","Experimental or functional validation evidence"],
+ ["Cell-type TWAS","Cell TWAS","Cell-type-specific transcriptome-wide association"],
+ ["Cross-tissue or model","Cross-tissue","Cross-tissue or multiple-model support"],
+ ["Methylation","Methylation","Epigenomic evidence"],
+ ["Regulatory variant","Regulatory","Regulatory variant evidence"],
+ ["Cell-type support","Cell type","Cell-type-specific supporting evidence"],
+ ["Sex-stratified","Sex","Sex-stratified results"],
+ ["Cross-disorder","Cross-disease","Cross-disorder evidence"]
+ ];
+ const layers=specs.map((sp,j)=>({key:'L'+j,label:sp[0],short:sp[1],description:sp[2]}));
+ if(p.l.length!==layers.length)throw Error('Layer count does not match spreadsheet');
+ const genes=p.g.map(([gene,studies,score,novelty,functions],i)=>({gene,rank:i+1,score,studies,novelty,functions,nLayers:0,counts:{}}));
+ const gwas=["Nicolas et al. 2018","Nicolas et al. 2018","Nicolas et al. 2018","Nicolas et al. 2018","Nicolas et al. 2018","Nicolas et al. 2018","van Rheenen et al. 2021","van Rheenen et al. 2021","Benyamin et al. 2017","van Rheenen et al. 2016","van Rheenen et al. 2021","van Rheenen et al. 2021","Original case-control cohort; Nicolas et al. 2018","van Rheenen et al. 2021","van Rheenen et al. 2021","Project MinE","van Rheenen et al. 2021","van Rheenen et al. 2021"];
+ const context=["13 brain/spinal cord regions","42 tissues","48 tissues","Brain, pituitary, blood","Brain tissues, skeletal muscle, blood","48 tissues","Brain tissues","DLPFC","Brain RNA-seq and blood","13 brain/spinal cord tissues","13 brain/spinal cord tissues","Cortex and DLPFC","Brain/spinal cord, muscle, blood","Brain, motor cortex, blood","Brain, nerve, other tissues","14 brain/spinal cord and peripheral regions","DLPFC single-nucleus cell populations","Whole blood"];
+ const records=p.r.map(([gi,si,src,mask])=>{
+  const g=genes[gi],study=p.s[si];if(!g||!study)throw Error('Invalid gene or study index');
+  const layerKeys=[];
+  for(let j=0;j<layers.length;j++)if(mask&(1<<j)){layerKeys.push('L'+j);g.counts['L'+j]=(g.counts['L'+j]||0)+1;}
+  return {gene:g.gene,study,source:p.o[src]||'',link:'https://pubmed.ncbi.nlm.nih.gov/?term='+encodeURIComponent(study+' amyotrophic lateral sclerosis transcriptome-wide association'),gwas:gwas[si]||'',context:context[si]||'',layers:layerKeys};
+ });
+ for(const g of genes)g.nLayers=Object.keys(g.counts).length;
+ if(genes.length!==395||p.s.length!==18||records.length!==593)throw Error('Unexpected evidence data size');
+ ALL.ALS={genes,records,layers,meta:{studies:p.s.length},label:'Amyotrophic lateral sclerosis (ALS)'};
+}
+
+const ALL={};
+const $=id=>document.getElementById(id);
+const ui={search:$('search'),subset:$('subset'),sort:$('sort'),layer:$('layer'),grid:$('mapgrid'),tooltip:$('tooltip')};
+const disease='ALS';
+let D,genes,records,layers,geneMap,geneRecords,cells,layerMap,visibleGenes=[],visibleLayers=[],selected=null,hoverEl=null;
+const fmt=n=>Number(n).toLocaleString(undefined,{maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function fillSelect(select,items){select.innerHTML=items.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join('')}
+function initializeExplorer(){
+ D=ALL.ALS;({genes,records,layers}=D);
+ geneMap=new Map(genes.map(g=>[g.gene,g]));geneRecords=new Map(genes.map(g=>[g.gene,[]]));cells=new Map();layerMap=new Map(layers.map(l=>[l.key,l]));
+ for(const r of records){geneRecords.get(r.gene).push(r);for(const k of r.layers){const id=r.gene+'|'+k;if(!cells.has(id))cells.set(id,[]);cells.get(id).push(r)}}
+ fillSelect(ui.subset,[['top','Top 40 by score'],['all','All '+genes.length+' genes']]);
+ fillSelect(ui.sort,[['rank','Evidence score'],['studies','Number of studies'],['breadth','Evidence layer breadth'],['alphabet','Gene name (A–Z)']]);
+ fillSelect(ui.layer,[['all','All '+layers.length+' layers'],...layers.map(l=>[l.key,l.label])]);
+ ui.search.value='';
+ $('statGenes').textContent=genes.length;$('statStudies').textContent=D.meta.studies;$('statLayers').textContent=layers.length;$('statRecords').textContent=records.length;
+ $('matrixTitle').textContent=D.label+' · gene × evidence';
+ selected={gene:genes[0].gene,layer:null};
+ hideTooltip();render();refreshDetails();
+}
+const getRefs=(gene,key)=>cells.get(gene+'|'+key)||[];
+const count=(gene,key)=>new Set(getRefs(gene,key).map(r=>r.study)).size;
+const unit=()=> 'studies';
+function prepare(){
+ const q=ui.search.value.trim().toLowerCase();
+ let arr=genes.filter(g=>ui.subset.value==='all'||g.rank<=40);
+ if(q)arr=arr.filter(g=>g.gene.toLowerCase().includes(q)||geneRecords.get(g.gene).some(r=>r.study.toLowerCase().includes(q)||r.source.toLowerCase().includes(q)));
+ if(ui.sort.value==='rank')arr.sort((a,b)=>a.rank-b.rank);
+ else if(ui.sort.value==='studies')arr.sort((a,b)=>b.studies-a.studies||a.rank-b.rank);
+ else if(ui.sort.value==='breadth')arr.sort((a,b)=>b.nLayers-a.nLayers||a.rank-b.rank);
+ else arr.sort((a,b)=>a.gene.localeCompare(b.gene));
+ visibleGenes=arr;visibleLayers=ui.layer.value==='all'?layers:layers.filter(l=>l.key===ui.layer.value);
+}
+function render(){
+ prepare();ui.grid.style.setProperty('--ncols',visibleLayers.length);
+ const metric='SCORE';
+ const head=[`<div class="corner genehead" role="columnheader">GENE</div>`,`<div class="corner studieshead" role="columnheader" title="Number of supporting studies">N</div>`,`<div class="corner scorehead" role="columnheader" title="${metric}">${metric}</div>`];
+ for(const l of visibleLayers)head.push(`<div role="columnheader" class="colhead" title="${esc(l.description)}"><span>${esc(l.short)}</span></div>`);
+ if(!visibleGenes.length){ui.grid.innerHTML=head.join('')+'<div class="emptymsg">No genes match these filters. Try “All genes” or clear the search.</div>'}
+ else{
+ const rows=[],maxM=Math.max(25,...genes.map(g=>Number(g.score)||0));
+ for(const g of visibleGenes){
+  const metricValue=g.score;
+  const metricDisplay=metricValue==null?'—':fmt(metricValue);
+  rows.push(`<button class="genecell" type="button" data-gene-label="${esc(g.gene)}" title="${esc(g.gene)}: all study evidence">${esc(g.gene)}</button>`);
+  rows.push(`<div class="studiescell" title="${g.studies} distinct studies">${g.studies}</div>`);
+  rows.push(`<div class="scorecell" title="${metric}: ${metricDisplay}"><span class="scorevalue">${metricDisplay}</span><span class="scorebar" style="width:${Math.max(2,25*Number(metricValue||0)/maxM)}px"></span></div>`);
+  for(const l of visibleLayers){const c=count(g.gene,l.key);rows.push(`<button type="button" role="gridcell" class="tile ${c===0?'empty':''} ${selected?.gene===g.gene&&selected?.layer===l.key?'selected':''}" data-cell="1" data-gene="${esc(g.gene)}" data-layer="${esc(l.key)}" data-v="${Math.min(c,4)}" aria-label="${esc(g.gene)}, ${esc(l.label)}: ${c} supporting ${unit()}">${c||''}</button>`)}
+ }
+ ui.grid.innerHTML=head.join('')+rows.join('');
+ }
+ $('resultLabel').innerHTML=`<strong>${visibleGenes.length} genes</strong> displayed · ${visibleLayers.length} evidence layers · ${esc(D.label)}`;
+ $('legendUnit').textContent='studies';
+ $('matrixSubtitle').textContent='Cell colour indicates number of '+unit()+'; mouseover identifies studies';
+}
+function smallStudyList(rr){const unique=[...new Set(rr.map(r=>r.study))].sort();return unique.length?'<ul>'+unique.slice(0,12).map(s=>'<li>'+esc(s)+'</li>').join('')+(unique.length>12?`<li>+${unique.length-12} more (click to expand)</li>`:'')+'</ul>':'<div class="ttsub">No supporting study recorded</div>'}
+function showTooltip(e,el){if(!el||e.pointerType==='touch')return;const gene=el.dataset.gene,key=el.dataset.layer,l=layerMap.get(key),rr=getRefs(gene,key),n=count(gene,key);
+ ui.tooltip.innerHTML=`<div class="tttitle"><i>${esc(gene)}</i> · ${esc(l.label)}</div><div class="ttsub">${n} supporting ${esc(unit())}</div>${smallStudyList(rr)}<div class="tap">Click to inspect evidence and publication links</div>`;
+ ui.tooltip.style.display='block';ui.tooltip.setAttribute('aria-hidden','false');moveTooltip(e);
+}
+function moveTooltip(e){if(ui.tooltip.style.display!=='block')return;const b=ui.tooltip.getBoundingClientRect(),m=12,o=15;ui.tooltip.style.left=Math.min(window.innerWidth-b.width-m,Math.max(m,e.clientX+o))+'px';ui.tooltip.style.top=Math.min(window.innerHeight-b.height-m,Math.max(m,e.clientY+o))+'px'}
+function hideTooltip(){ui.tooltip.style.display='none';ui.tooltip.setAttribute('aria-hidden','true')}
+ui.grid.addEventListener('pointerover',e=>{const el=e.target.closest('[data-cell]');if(el===hoverEl)return;hoverEl=el;if(el)showTooltip(e,el);else hideTooltip()});
+ui.grid.addEventListener('pointermove',e=>{if(hoverEl)moveTooltip(e)});
+ui.grid.addEventListener('pointerleave',()=>{hoverEl=null;hideTooltip()});
+ui.grid.addEventListener('focusin',e=>{const el=e.target.closest('[data-cell]');if(el){const r=el.getBoundingClientRect();showTooltip({clientX:r.left,clientY:r.bottom,pointerType:'mouse'},el)}});
+ui.grid.addEventListener('focusout',hideTooltip);
+ui.grid.addEventListener('click',e=>{const t=e.target.closest('[data-cell]'),g=e.target.closest('[data-gene-label]');if(t){selected={gene:t.dataset.gene,layer:t.dataset.layer};detailCell(selected.gene,selected.layer);highlight()}else if(g){selected={gene:g.dataset.geneLabel,layer:null};detailGene(selected.gene);highlight()}});
+function highlight(){ui.grid.querySelectorAll('.tile.selected').forEach(el=>el.classList.remove('selected'));if(selected?.layer){const el=[...ui.grid.querySelectorAll('[data-cell]')].find(e=>e.dataset.gene===selected.gene&&e.dataset.layer===selected.layer);if(el)el.classList.add('selected')}}
+function referenceCard(r){
+ const safeLink=r.link&&/^https:\/\//.test(r.link)?r.link:'';
+ const gw=r.gwas?`<span class="pill">${esc(r.gwas)}</span>`:'';
+ return `<article class="record"><div class="studyname">${esc(r.study)}</div>${gw}${r.context?`<div class="fact"><b>Tissue / context:</b> ${esc(r.context)}</div>`:''}<div class="sourceline">${safeLink?`<a href="${esc(safeLink)}" target="_blank" rel="noopener noreferrer">Find publication on PubMed ↗</a>`:'No publication link recorded'}${r.source?`<div><b>Source:</b> ${esc(r.source)}</div>`:''}</div></article>`;
+}
+function detailCell(gene,key){const l=layerMap.get(key),rr=getRefs(gene,key).slice().sort((a,b)=>a.study.localeCompare(b.study)),n=count(gene,key);
+ $('detailKicker').classList.remove('hidden');$('detailKicker').textContent=disease+' · GENE × EVIDENCE';$('detailTitle').innerHTML=`<i>${esc(gene)}</i> / ${esc(l.label)}`;$('detailDescription').classList.remove('hidden');$('detailDescription').textContent=l.description;
+ let top=`<div class="countline"><strong>${n}</strong> supporting ${esc(unit())} from ${rr.length} annotated study record${rr.length!==1?'s':''}</div>`;
+ $('detailBody').innerHTML=top+(rr.length?rr.map(referenceCard).join(''):'<div class="panelnote">No supporting study annotated for this combination in the review dataset. This does not establish absence of association.</div>');
+}
+function detailGene(gene){const g=geneMap.get(gene),rr=geneRecords.get(gene).slice().sort((a,b)=>a.study.localeCompare(b.study));
+ $('detailKicker').classList.add('hidden');$('detailTitle').innerHTML=`<i>${esc(gene)}</i>`;$('detailDescription').classList.add('hidden');
+ const tags=layers.filter(l=>g.counts[l.key]>0).map(l=>`<span class="pill" style="margin:3px 4px 4px 0">${esc(l.short)} ${g.counts[l.key]}</span>`).join('');
+ let meta=`<div class="countline"><strong>${g.studies}</strong> supporting studies · <strong>${g.nLayers}</strong> evidence layers`;
+ if(g.score!==null)meta+=`<div>Evidence score ${fmt(g.score)}</div>`;
+ meta+='</div>';
+ if(g.functions)meta+=`<div class="panelnote" style="margin-bottom:10px"><b>Putative biological functions:</b> ${esc(g.functions)}</div>`;
+ $('detailBody').innerHTML=meta+`<div style="margin-bottom:12px">${tags}</div>`+rr.map(referenceCard).join('');
+}
+function refreshDetails(){if(!selected)return;if(selected.layer)detailCell(selected.gene,selected.layer);else detailGene(selected.gene)}
+function update(){hideTooltip();render();refreshDetails()}
+for(const id of ['subset','sort','layer'])$(id).addEventListener('change',update);
+ui.search.addEventListener('input',update);
+$('reset').addEventListener('click',initializeExplorer);
+function download(name,blob){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500)}
+const quoteCSV=s=>'"'+String(s??'').replace(/"/g,'""')+'"';
+$('csv').addEventListener('click',()=>{const rows=[['Disease','Gene','Rank','Evidence score','Evidence breadth','N studies','Evidence layer','N supporting studies','Supporting studies','Publication links','Source notes']];
+ for(const g of visibleGenes)for(const l of visibleLayers){const rr=getRefs(g.gene,l.key);rows.push([disease,g.gene,g.rank,g.score??'',g.nLayers,g.studies,l.label,new Set(rr.map(r=>r.study)).size,[...new Set(rr.map(r=>r.study))].join(' | '),[...new Set(rr.map(r=>r.link).filter(Boolean))].join(' | '),[...new Set(rr.map(r=>r.source).filter(Boolean))].join(' | ')])}
+ download(`${disease.toLowerCase()}_twas_evidence_filtered.csv`,new Blob(['\ufeff'+rows.map(a=>a.map(quoteCSV).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));});
+function svgEsc(t){return String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));}
+$('svg').addEventListener('click',()=>{const cw=45,gw=145,mw=65,rh=26,top=160,W=gw+mw+visibleLayers.length*cw+34,H=top+visibleGenes.length*rh+65,colors=['#eef2f5','#cae5e7','#8dcbd1','#43a2b3','#176b82'];
+ const s=[`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`,`<rect width="100%" height="100%" fill="white"/><style>text{font-family:Arial,sans-serif;fill:#213849}.gene{font-size:12px;font-style:italic}.head{font-size:10px;fill:#3b5a6a}.count{font-size:10px;font-weight:bold}.score{font-size:10px}</style>`,`<text x="14" y="25" style="font-size:19px;font-weight:bold">${svgEsc(D.label)} TWAS evidence</text>`,`<text x="14" y="44" class="head">${visibleGenes.length} genes · ${visibleLayers.length} layers · ${svgEsc(unit())}</text>`];
+ visibleLayers.forEach((l,j)=>s.push(`<text class="head" text-anchor="start" transform="translate(${gw+mw+j*cw+cw/2},${top-7}) rotate(-65)">${svgEsc(l.label)}</text>`));
+ s.push(`<text x="14" y="${top-10}" class="head">GENE</text><text x="${gw+5}" y="${top-10}" class="head">SCORE</text>`);
+ visibleGenes.forEach((g,i)=>{const y=top+i*rh;s.push(`<text class="gene" x="14" y="${y+18}">${svgEsc(g.gene)}</text><text class="score" x="${gw+5}" y="${y+18}">${fmt(g.score)}</text>`);visibleLayers.forEach((l,j)=>{const n=count(g.gene,l.key),x=gw+mw+j*cw,v=Math.min(n,4);s.push(`<rect x="${x+1}" y="${y+1}" width="${cw-2}" height="${rh-2}" fill="${colors[v]}"/>`);if(n>0)s.push(`<text class="count" x="${x+cw/2}" y="${y+17}" text-anchor="middle" style="fill:${v>2?'#fff':'#173c4c'}">${n}</text>`)})});
+ s.push(`<text x="14" y="${H-18}" class="head">Review-specific evidence; colours capped at 4+ for display, numbers exact.</text></svg>`);
+ download(`${disease.toLowerCase()}_twas_heatmap.svg`,new Blob([s.join('')],{type:'image/svg+xml;charset=utf-8'}));
+});
+loadALSDataset().then(initializeExplorer).catch(e=>{console.error(e);document.getElementById('mapgrid').textContent='Unable to load ALS evidence data.';});
+</script></body></html>
